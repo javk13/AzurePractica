@@ -28,7 +28,7 @@ resource "azurerm_network_interface" "nic_vm" {
   }
 }
 
-# Creación de Ip Pública
+# Creación de Ip Pública para vm
 resource "azurerm_public_ip" "pip_vm" {
   name                = "public-ip-vm"
   resource_group_name = azurerm_resource_group.rg.name

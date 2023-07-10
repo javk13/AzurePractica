@@ -19,12 +19,42 @@ output "acr_login_server" {
   value = azurerm_container_registry.acr.login_server
 }
 
+# Muestra usuario container registry
 output "acr_admin_user" {
-  value     = azurerm_container_registry.acr.admin_username
+  # salida sensible
+  value = azurerm_container_registry.acr.admin_username
+  //sensitive = true
+  # Muestra información
+  //value = nonsensitive(azurerm_container_registry.acr.admin_username)
+}
+
+# Muestra contraseña container registry
+output "acr_admin_pass" {
+  # salida sensible
+  //value     = azurerm_container_registry.acr.admin_password
+  //sensitive = true
+  # Muestra información
+  value = nonsensitive(azurerm_container_registry.acr.admin_password)
+}
+
+
+# Cluster Kubernetes:
+
+output "id" {
+  value = azurerm_kubernetes_cluster.aks.id
+}
+
+output "host" {
+  value = azurerm_kubernetes_cluster.aks.kube_config.0.host
   sensitive = true
 }
 
-output "acr_admin_pass" {
-  value     = azurerm_container_registry.acr.admin_password
+output "kube_config" {
+  value = azurerm_kubernetes_cluster.aks.kube_config_raw
+  sensitive = true
+}
+
+output "client_certificate" {
+  value = azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate
   sensitive = true
 }
