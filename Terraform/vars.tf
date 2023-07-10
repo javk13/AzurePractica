@@ -38,3 +38,16 @@ variable "network_name" {
 variable "subnet_name" {
   default = "subnet1"
 }
+
+# Nombre usuario del repositorio de imágenes en Azure
+variable "registry_name" {
+  type        = string
+  default     = "javk13"
+}
+
+# Nivel de servicio del registry/repositorio (También llamada SKU)
+variable "registry_sku" {
+  type        = string
+  description = "Tipo de SKU a utilizar por el registry. Opciones válidas: Basic, Standard, Premium."
+  default     = "Basic"
+}
