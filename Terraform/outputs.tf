@@ -21,11 +21,7 @@ output "acr_login_server" {
 
 # Muestra usuario container registry
 output "acr_admin_user" {
-  # salida sensible
   value = azurerm_container_registry.acr.admin_username
-  //sensitive = true
-  # Muestra información
-  //value = nonsensitive(azurerm_container_registry.acr.admin_username)
 }
 
 # Muestra contraseña container registry
