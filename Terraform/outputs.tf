@@ -50,6 +50,7 @@ output "kube_config" {
   sensitive = true
 }
 
+# Creo que no es necesario.
 output "client_certificate" {
   value = azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate
   sensitive = true
