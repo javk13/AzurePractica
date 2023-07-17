@@ -1,0 +1,59 @@
+---
+- name: 'Servidor Web Apache'
+  hosts: servidorweb
+  remote_user: Javk13
+  become: true
+  vars_files:
+    - vars/00_vars.yaml
+  tasks:
+
+    - name: 'Activar repositorio EPEL en CentOS 8'
+      yum:
+        name: epel-release
+        state: latest
+      when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '8'
+
+    - name: 'Instalación de dependencias 00_vars.yaml'
+      #ansible.builtin.yum: #Compatible con 2.9
+      yum: # para ansible 2.9
+        name: "{{ paquetes }}"
+        state: latest
+     
+    - name: 'Creación de directorio '
+      file: # para ansible 2.9
+        path: /home/Javk13/servidorweb
+        state: directory
+        mode: '0755'
+
+    - name: 'Credenciales básicas en servidor'
+      #community.general.htpasswd:
+      htpasswd: # para ansible 2.9
+        path: /home/Javk13/servidorweb/.creds
+        name: usuario23
+        password: 'S3rv3R'
+        owner: root
+        mode: 0640
+
+    - name: 'Creación de clave privada para certificado'
+      community.crypto.openssl_privatekey: #Compatible con 2.9
+      #openssl_privatekey: # para ansible 2.9
+        path: /home/Javk13/servidorweb/clavePriv.key
+        size: 2048
+
+    - name: 'Creación petición de firma certificado'
+      community.crypto.openssl_csr: #Compatible con 2.9
+      #openssl_csr: # para ansible 2.9
+        path: /home/Javk13/servidorweb/clavePriv.csr
+        privatekey_path: /home/Javk13/servidorweb/clavePriv.key
+        common_name: servicio_web_caso_practico
+        country_name: ES
+        organization_name: Unir
+
+    - name: 'Generación de certificado autofirmado OpenSSL'
+      community.crypto.x509_certificate: #Compatible con 2.9
+      #openssl_certificate: # para ansible 2.9
+        path: /home/Javk13/servidorweb/clavePriv.crt
+        privatekey_path: /home/Javk13/servidorweb/clavePriv.key
+        csr_path: /home/Javk13/servidorweb/clavePriv.csr
+        provider: selfsigned
+       

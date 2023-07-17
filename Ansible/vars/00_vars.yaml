@@ -1,0 +1,6 @@
+paquetes:
+- podman
+- httpd-tools
+- openssl
+#- epel-release
+- python3-passlib

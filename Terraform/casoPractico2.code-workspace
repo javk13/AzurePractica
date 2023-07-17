@@ -1,8 +1,5 @@
 {
-	"folders": [
-		{
-			"path": ".."
-		}
-	],
-	"settings": {}
+    "settings": {
+        "ansible.python.interpreterPath": "/bin/python"
+    }
 }
