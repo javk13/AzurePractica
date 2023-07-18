@@ -4,3 +4,4 @@ paquetes:
 - openssl
 #- epel-release
 - python3-passlib
+- git
