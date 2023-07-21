@@ -1,0 +1,18 @@
+---
+- name: 'Servidor Web Nginx'
+  hosts: localhost
+  #remote_user: Javk13
+  #become: true
+  vars_files:
+    #- vars/00_vars.yaml
+    - vars/01_vars.yaml
+    #- vars/02_vars.yaml
+  tasks:
+
+    - name: Run command if /path/to/database does not exist (with 'cmd' parameter)
+      ansible.builtin.command: 'az aks get-credentials --resource-group CasoPractico --name clusterAKS --overwrite-existing' 
+
+    - name: Create a Deployment by reading the definition from a local file
+      kubernetes.core.k8s:
+        state: present
+        src: https://github.com/javk13/WebAks.git

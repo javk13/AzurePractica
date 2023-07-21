@@ -1,0 +1,71 @@
+---
+- name: 'Servidor Web Nginx'
+  hosts: servidorwebNginx
+  remote_user: Javk13
+  become: true
+  vars_files:
+    #- vars/00_vars.yaml
+    - vars/01_vars.yaml
+    #- vars/02_vars.yaml
+  tasks:
+  
+    - name: 'Creación de directorio de 01_vars.yaml'
+      ansible.builtin.file:
+      #file: # para ansible 2.9
+        path: "{{directorios}}"
+        #path: /home/Javk13/servidorweb
+        state: directory
+        mode: '0755'
+
+    - name: 'Descarga de .yaml desde repo Github'
+      ansible.builtin.git:
+      #git:
+        repo: https://github.com/javk13/WebAks.git
+        dest: /home/Javk13/webAKS
+
+    - name: 'descarga de imagen'
+      containers.podman.podman_image:
+        name: nginx 
+
+    - name: 'Cambio de nombre imagen'
+      containers.podman.podman_tag:
+        image: nginx
+        target_names:
+          - javk13.azurecr.io/web_aks:casopractico2
+
+    - name: 'Etiquetado y envío a registry'
+      containers.podman.podman_image:
+        name: javk13.azurecr.io/web_aks
+        tag: casopractico2
+        push: true
+        push_args:
+          dest: javk13.azurecr.io #
+        auth_file: etc/containers/auth.json
+        pull: false
+
+    #- name: Remove an image
+      #containers.podman.podman_image:
+        #name: "{{ imagenes }}" (no funciona)
+        #name: javk13.azurecr.io/web_aks (funciona)
+        #state: absent
+
+    #- name: Execute the command in remote shell; stdout goes to the specified file on the remote
+      #ansible.builtin.shell:
+        ##chdir: /home/Javk13/servidorweb/
+        #free_form: az aks get-credentials -- resource-group CasoPractico --name clusterAKS
+        ##cmd: az aks get-credentials -- resource-group CasoPractico --name clusterAKS 
+
+    #- name: Run command if /path/to/database does not exist (with 'cmd' parameter)
+      #ansible.builtin.command: az aks get-credentials -- resource-group CasoPractico --name clusterAKS
+        #cmd:az aks get-credentials -- resource-group CasoPractico --name clusterAKS
+    - name: 'Instalación de dependencias de 01_vars.yaml'
+      ansible.builtin.yum: #Compatible con 2.9
+      #yum: # para ansible 2.9
+        name: "{{ paquetes }}"
+        state: latest
+
+    - name: Create a Deployment by reading the definition from a local file
+      kubernetes.core.k8s:
+        state: present
+        src: https://github.com/javk13/WebAks.git
+          

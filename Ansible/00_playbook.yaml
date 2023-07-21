@@ -1,28 +1,28 @@
 ---
 - name: 'Servidor Web Apache'
-  hosts: servidorweb
+  hosts: servidorwebApache
   remote_user: Javk13
   become: true
   vars_files:
     - vars/00_vars.yaml
-    - vars/01_vars.yaml
+    #- vars/01_vars.yaml
     #- vars/02_vars.yaml
   tasks:
 
-    - name: 'Activar repositorio EPEL en CentOS 8'
+    - name: 'Activar repositorio EPEL en CentOS 8 (rpm: python3-passlib)'
       ansible.builtin.yum:
       #yum:
         name: epel-release
         state: latest
       when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '8'
 
-    - name: 'Instalación de dependencias 00_vars.yaml'
+    - name: 'Instalación de dependencias de 00_vars.yaml'
       ansible.builtin.yum: #Compatible con 2.9
       #yum: # para ansible 2.9
         name: "{{ paquetes }}"
         state: latest
      
-    - name: 'Creación de directorio '
+    - name: 'Creación de directorios de 01_vars.yaml'
       ansible.builtin.file:
       #file: # para ansible 2.9
         path: "{{directorios}}"
@@ -100,14 +100,14 @@
         #chdir: /home/Javk13/servidorweb/
         #cmd: sudo podman build -t webserver . 
 
-    - name: Login to default registry and create ${XDG_RUNTIME_DIR}/containers/auth.json
+    - name: 'Autentificación en registry y copia credenciales en .json'
       containers.podman.podman_login:
         username: javk13
-        password: '0NF7buDhlFsuDGXyEZ6FIQQIYpvHyzhOXlfo6+cbiZ+ACRCpndym'
+        password: '3SdEu9eoY7K3Q4fjsWgQdOWNoUCypzpNe+aX4ZpHRa+ACRCoCFxV'
         registry: javk13.azurecr.io
         authfile: etc/containers/auth.json #
 
-    - name: 'Creación,nombrado y etiquetado de imagen'
+    - name: 'Creación de imagen y envio a registry'
       containers.podman.podman_image:
       #podman_image:
         build:
@@ -130,7 +130,7 @@
         ##password: 0NF7buDhlFsuDGXyEZ6FIQQIYpvHyzhOXlfo6+cbiZ+ACRCpndym
         #password: "{{ vault_registry_password }}"
 
-    - name: Run container
+    - name: 'Creación contenedor,conf. puertos y copia a systemd'
       containers.podman.podman_container:
         name: web
         image: javk13.azurecr.io/servidorweb:casopractico2
@@ -145,15 +145,15 @@
           restart_policy: always
           names: true
 
-    - name: Just force systemd to reread configs (2.4 and above)
+    - name: 'Reinicio del demonio systemd'
       ansible.builtin.systemd:
         daemon_reload: true
-        
+
     - name: Just force systemd to re-execute itself (2.8 and above)
       ansible.builtin.systemd:
         daemon_reexec: true
 
-    - name: Make sure a service unit is running
+    - name: 'Levantar contenedor desde systemd'
       ansible.builtin.systemd:
         state: started
         name: container-web.service

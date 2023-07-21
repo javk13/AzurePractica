@@ -1,2 +1,4 @@
-[servidorweb]
-20.0.38.144
+[servidorwebApache]
+20.90.186.46
+[servidorwebNginx]
+20.90.186.46

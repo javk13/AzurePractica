@@ -5,3 +5,7 @@ paquetes:
 #- epel-release
 - python3-passlib
 - git
+
+directorios:
+- /home/Javk13/servidorweb
+- /home/Javk13/repoCasoPractico
