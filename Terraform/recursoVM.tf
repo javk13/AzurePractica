@@ -24,17 +24,17 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 
   plan {
-    name      = "centos-8-stream-free"
-    product   = "centos-8-stream-free"
-    publisher = "cognosys"
+    name      = "centos-9-stream-latest"
+    product   = "centos-9-stream-latest"
+    publisher = "procomputers"
   }
 
 
   source_image_reference {
-    publisher = "cognosys"
-    offer     = "centos-8-stream-free"
-    sku       = "centos-8-stream-free"
-    version   = "22.03.28"
+    publisher = "procomputers"
+    offer     = "centos-9-stream-latest"
+    sku       = "centos-9-stream-latest"
+    version   = "9.2023.0218"
   }
 }
 
