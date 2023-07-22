@@ -4,6 +4,7 @@ paquetes:
 - openssl
 #- epel-release
 - python3-passlib
+- python3-cryptography
 - git
 
 directorios:

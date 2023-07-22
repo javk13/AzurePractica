@@ -1,8 +1,9 @@
 ---
 - name: 'Servidor Web Nginx'
-  hosts: localhost
-  #remote_user: Javk13
-  #become: true
+  #hosts: localhost
+  hosts: servidorwebNginx
+  remote_user: Javk13
+  become: true
   vars_files:
     #- vars/00_vars.yaml
     - vars/01_vars.yaml
@@ -12,7 +13,14 @@
     - name: Run command if /path/to/database does not exist (with 'cmd' parameter)
       ansible.builtin.command: 'az aks get-credentials --resource-group CasoPractico --name clusterAKS --overwrite-existing' 
 
+    - name: 'Instalación de dependencias de 01_vars.yaml'
+      ansible.builtin.yum: #Compatible con 2.9
+      ##yum: # para ansible 2.9
+        name: "{{ paquetes }}"
+        state: latest
+
     - name: Create a Deployment by reading the definition from a local file
       kubernetes.core.k8s:
         state: present
-        src: https://github.com/javk13/WebAks.git
+        src: /home/Javk13/webAKS
+        #src: /home/javier/Documentos/DevOps-Unir/Caso_practico_2/casoPractico2/nginx.yaml #

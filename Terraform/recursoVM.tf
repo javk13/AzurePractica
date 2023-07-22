@@ -24,17 +24,17 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 
   plan {
-    name      = "centos-9-stream-latest"
-    product   = "centos-9-stream-latest"
-    publisher = "procomputers"
+    name      = "9-gen2"
+    product   = "almalinux"
+    publisher = "almalinux"
   }
 
 
   source_image_reference {
-    publisher = "procomputers"
-    offer     = "centos-9-stream-latest"
-    sku       = "centos-9-stream-latest"
-    version   = "9.2023.0218"
+    publisher = "almalinux"
+    offer     = "almalinux"
+    sku       = "9-gen2"
+    version   = "9.1.2022122801"
   }
 }
 

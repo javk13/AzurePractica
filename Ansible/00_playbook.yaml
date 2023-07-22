@@ -14,7 +14,7 @@
       #yum:
         name: epel-release
         state: latest
-      when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '8'
+      when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '9'
 
     - name: 'Instalación de dependencias de 00_vars.yaml'
       ansible.builtin.yum: #Compatible con 2.9
@@ -103,7 +103,7 @@
     - name: 'Autentificación en registry y copia credenciales en .json'
       containers.podman.podman_login:
         username: javk13
-        password: '3SdEu9eoY7K3Q4fjsWgQdOWNoUCypzpNe+aX4ZpHRa+ACRCoCFxV'
+        password: 'DcMSWCTifpgyUyKWcLwEk4Cu3gN6cprhsHE96HiqN1+ACRCUKdc4'
         registry: javk13.azurecr.io
         authfile: etc/containers/auth.json #
 

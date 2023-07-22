@@ -22,10 +22,11 @@
       #git:
         repo: https://github.com/javk13/WebAks.git
         dest: /home/Javk13/webAKS
+        #mode: '0755' (No soporta mode)
 
     - name: 'descarga de imagen'
       containers.podman.podman_image:
-        name: nginx 
+        name: docker.io/library/nginx 
 
     - name: 'Cambio de nombre imagen'
       containers.podman.podman_tag:
@@ -52,12 +53,12 @@
     #- name: Execute the command in remote shell; stdout goes to the specified file on the remote
       #ansible.builtin.shell:
         ##chdir: /home/Javk13/servidorweb/
-        #free_form: az aks get-credentials -- resource-group CasoPractico --name clusterAKS
-        ##cmd: az aks get-credentials -- resource-group CasoPractico --name clusterAKS 
+        #free_form: az aks get-credentials --resource-group CasoPractico --name clusterAKS
+        ##cmd: az aks get-credentials --resource-group CasoPractico --name clusterAKS 
 
     #- name: Run command if /path/to/database does not exist (with 'cmd' parameter)
-      #ansible.builtin.command: az aks get-credentials -- resource-group CasoPractico --name clusterAKS
-        #cmd:az aks get-credentials -- resource-group CasoPractico --name clusterAKS
+      #ansible.builtin.command: az aks get-credentials --resource-group CasoPractico --name clusterAKS
+        #cmd:az aks get-credentials --resource-group CasoPractico --name clusterAKS
     - name: 'Instalación de dependencias de 01_vars.yaml'
       ansible.builtin.yum: #Compatible con 2.9
       #yum: # para ansible 2.9
