@@ -1,26 +1,57 @@
 ---
 - name: 'Servidor Web Nginx'
-  #hosts: localhost
-  hosts: servidorwebNginx
-  remote_user: Javk13
-  become: true
+  hosts: localhost
+  #hosts: servidorwebNginx
+  #remote_user: Javk13
+  #become: true
   vars_files:
     #- vars/00_vars.yaml
     - vars/01_vars.yaml
     #- vars/02_vars.yaml
   tasks:
-
-    - name: Run command if /path/to/database does not exist (with 'cmd' parameter)
-      ansible.builtin.command: 'az aks get-credentials --resource-group CasoPractico --name clusterAKS --overwrite-existing' 
-
-    - name: 'Instalación de dependencias de 01_vars.yaml'
-      ansible.builtin.yum: #Compatible con 2.9
-      ##yum: # para ansible 2.9
-        name: "{{ paquetes }}"
-        state: latest
+    
+    - name: Execute the command 
+      ansible.builtin.shell: 'az aks get-credentials --resource-group CasoPractico --name clusterAKS --overwrite-existing'
 
     - name: Create a Deployment by reading the definition from a local file
       kubernetes.core.k8s:
         state: present
-        src: /home/Javk13/webAKS
+        src: '/home/torre/AzurePractica/nginx.yaml'
+
+    #- name: Run command if /path/to/database does not exist (with 'cmd' parameter)
+      #ansible.builtin.command: 'az aks get-credentials --resource-group CasoPractico --name clusterAKS --overwrite-existing' 
+
+    #- name: 'Instalación de dependencias de 01_vars.yaml'
+      #ansible.builtin.yum: #Compatible con 2.9
+      ##yum: # para ansible 2.9
+        #name: "{{ paquetes }}"
+        #state: latest
+
+    #- name: Create a Deployment by reading the definition from a local file
+      #kubernetes.core.k8s:
+        #state: present
+        #src: /home/Javk13/webAKS
         #src: /home/javier/Documentos/DevOps-Unir/Caso_practico_2/casoPractico2/nginx.yaml #
+
+    #- name: Execute the command in remote shell; stdout goes to the specified file on the remote
+      #ansible.builtin.shell:
+        ##chdir: /home/Javk13/servidorweb/
+        #free_form: az aks get-credentials --resource-group CasoPractico --name clusterAKS
+        ##cmd: az aks get-credentials --resource-group CasoPractico --name clusterAKS 
+
+    #- name: Run command if /path/to/database does not exist (with 'cmd' parameter)
+      #ansible.builtin.command: az aks get-credentials --resource-group CasoPractico --name clusterAKS
+        #cmd:az aks get-credentials --resource-group CasoPractico --name clusterAKS
+    #- name: 'Instalación de dependencias de 01_vars.yaml'
+      #ansible.builtin.yum: #Compatible con 2.9
+      #yum: # para ansible 2.9
+        #name: "{{ paquetes }}"
+        #state: latest
+
+    #- name: Create a Deployment by reading the definition from a local file
+      #kubernetes.core.k8s:
+        #state: present
+        #src: 'https://github.com/javk13/WebAks.git'
+
+      
+        

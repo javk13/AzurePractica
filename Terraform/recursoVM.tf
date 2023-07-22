@@ -13,7 +13,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   admin_ssh_key {
     username   = var.ssh_user
     #Anulo referencia a variable con claves ya existentes
-    //public_key = file(var.public_key_path)
+    #//public_key = file(var.public_key_path)
     #Incluyo referencia a llave pública nueva
     public_key = file(var.public_key)
   }

@@ -1,4 +1,7 @@
 [servidorwebApache]
-51.142.98.250
+20.68.147.144
+
 [servidorwebNginx]
-51.142.98.250
+20.68.147.144
+
+[localhost]

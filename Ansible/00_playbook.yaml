@@ -103,7 +103,7 @@
     - name: 'Autentificación en registry y copia credenciales en .json'
       containers.podman.podman_login:
         username: javk13
-        password: 'DcMSWCTifpgyUyKWcLwEk4Cu3gN6cprhsHE96HiqN1+ACRCUKdc4'
+        password: 'qRgAk8O0N5vAQRALJnh8VnQ8KvctotPMJ5MGsrDX5d+ACRAfClxi'
         registry: javk13.azurecr.io
         authfile: etc/containers/auth.json #
 
