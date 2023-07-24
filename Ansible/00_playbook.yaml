@@ -79,7 +79,7 @@
     - name: 'Autentificandose en Acr y copiando credenciales en .json'
       containers.podman.podman_login:
         username: javk13
-        password: 'PYfjEDSu56eTYEGVBg6752PlWa1TARZGP0iU3hupUT+ACRCq/vw0'
+        password: '7n2Ki9Lx8zzQoNxMP9ZO9AVi8ahVu2ko4Go17GV+TE+ACRBmBrzj'
         registry: javk13.azurecr.io
         authfile: etc/containers/auth.json 
 

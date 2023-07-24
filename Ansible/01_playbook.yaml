@@ -1,5 +1,5 @@
 ---
-- name: 'Servidor Web Nginx'
+- name: 'Requisitos Web Nginx'
   hosts: servidorwebNginx
   remote_user: Javk13
   become: true

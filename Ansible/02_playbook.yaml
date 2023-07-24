@@ -1,5 +1,5 @@
 ---
-- name: 'Servidor Web Nginx'
+- name: 'Nginx Kubernetes'
   hosts: localhost
   vars_files:
     - vars/01_vars.yaml
