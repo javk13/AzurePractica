@@ -13,10 +13,10 @@
         state: directory
         mode: '0755'
 
-    - name: 'Descargando yaml con objetos del cluster desde Github'
-      ansible.builtin.git:
-        repo: https://github.com/javk13/WebAks.git
-        dest: /home/Javk13/webAKS
+    #- name: 'Descargando yaml con objetos del cluster desde Github'
+      #ansible.builtin.git:
+        #repo: https://github.com/javk13/WebAks.git
+        #dest: /home/Javk13/webAKS
 
     - name: 'Descargando imagen desde Docker Hub'
       containers.podman.podman_image:

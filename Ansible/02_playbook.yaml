@@ -5,10 +5,15 @@
     - vars/01_vars.yaml
   tasks:
     
+    - name: 'Descargando yaml con objetos del cluster desde Github'
+      ansible.builtin.git:
+        repo: https://github.com/javk13/WebAks.git
+        dest: ~/servNginx
+
     - name: 'Obteniendo credenciales del cluster'
       ansible.builtin.shell: 'az aks get-credentials --resource-group CasoPractico --name clusterAKS --overwrite-existing'
 
     - name: 'Ejecutando yaml con objetos'
       kubernetes.core.k8s:
         state: present
-        src: '/home/torre/AzurePractica/nginx.yaml'
+        src: '~/servNginx/nginx.yaml'
