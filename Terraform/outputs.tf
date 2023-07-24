@@ -1,9 +1,9 @@
 # Salidas de Terraform
 
 # Muestra grupo de recursos
-output "resource_group_id" {
-  value = azurerm_resource_group.rg.id
-}
+#output "resource_group_id" {
+  #value = azurerm_resource_group.rg.id
+#}
 
 # Muestra IP Pública
 output "vm_public_ip" {
@@ -15,9 +15,9 @@ output "ssh_user" {
   value = var.ssh_user
 }
 
-output "acr_login_server" {
-  value = azurerm_container_registry.acr.login_server
-}
+#output "acr_login_server" {
+  #value = azurerm_container_registry.acr.login_server
+#}
 
 # Muestra usuario container registry
 output "acr_admin_user" {
@@ -36,22 +36,22 @@ output "acr_admin_pass" {
 
 # Cluster Kubernetes:
 
-output "id" {
-  value = azurerm_kubernetes_cluster.aks.id
-}
+#output "id" {
+  #value = azurerm_kubernetes_cluster.aks.id
+#}
 
-output "host" {
-  value = azurerm_kubernetes_cluster.aks.kube_config.0.host
-  sensitive = true
-}
+#output "host" {
+  #value = azurerm_kubernetes_cluster.aks.kube_config.0.host
+  #sensitive = true
+#}
 
-output "kube_config" {
-  value = azurerm_kubernetes_cluster.aks.kube_config_raw
-  sensitive = true
-}
+#output "kube_config" {
+  #value = azurerm_kubernetes_cluster.aks.kube_config_raw
+  #sensitive = true
+#}
 
 # Creo que no es necesario.
-output "client_certificate" {
-  value = azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate
-  sensitive = true
-}
+#output "client_certificate" {
+  #value = azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate
+  #sensitive = true
+#}
