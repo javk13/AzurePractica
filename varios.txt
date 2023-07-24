@@ -1,4 +1,0 @@
-- Aceptación de terminos imagen almalinux 9 gratuita:
-az vm image terms accept --urn almalinux:almalinux:9-gen2:9.1.2022122801
-
-
