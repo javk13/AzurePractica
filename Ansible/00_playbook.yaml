@@ -5,54 +5,44 @@
   become: true
   vars_files:
     - vars/00_vars.yaml
-    #- vars/01_vars.yaml
-    #- vars/02_vars.yaml
   tasks:
 
-    - name: 'Activar repositorio EPEL en CentOS 8 (rpm: python3-passlib)'
+    - name: 'Activando repositorio EPEL para AlmaLinux 9'
       ansible.builtin.yum:
-      #yum:
         name: epel-release
         state: latest
       when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '9'
 
-    - name: 'Instalación de dependencias de 00_vars.yaml'
-      ansible.builtin.yum: #Compatible con 2.9
-      #yum: # para ansible 2.9
+    - name: 'Instalando dependencias indicadas en 00_vars.yaml'
+      ansible.builtin.yum: 
         name: "{{ paquetes }}"
         state: latest
      
-    - name: 'Creación de directorios de 01_vars.yaml'
+    - name: 'Creando directorios indicados en 01_vars.yaml'
       ansible.builtin.file:
-      #file: # para ansible 2.9
         path: "{{directorios}}"
-        #path: /home/Javk13/servidorweb
         state: directory
         mode: '0755'
 
-    - name: 'Credenciales básicas en servidor'
+    - name: 'Creando credenciales básicas para web Apache'
       community.general.htpasswd:
-      #htpasswd: # para ansible 2.9
         path: /home/Javk13/servidorweb/.creds
         name: usuario23
         password: 'S3rv3R'
         owner: Javk13 
         group: Javk13 
-        #mode: 0640
         mode: '0755'#
 
-    - name: 'Creación de clave privada para certificado'
-      community.crypto.openssl_privatekey: #Compatible con 2.9
-      #openssl_privatekey: # para ansible 2.9
+    - name: 'Creando clave privada de certificado'
+      community.crypto.openssl_privatekey: 
         path: /home/Javk13/servidorweb/localhost.key
         size: 2048
         owner: Javk13 
         group: Javk13 
         mode: '0755'#
 
-    - name: 'Creación petición de firma certificado'
-      community.crypto.openssl_csr: #Compatible con 2.9
-      #openssl_csr: # para ansible 2.9
+    - name: 'Creando petición de firma para certificado'
+      community.crypto.openssl_csr:
         path: /home/Javk13/servidorweb/localhost.csr
         privatekey_path: /home/Javk13/servidorweb/localhost.key
         common_name: servicio_web_caso_practico
@@ -62,81 +52,55 @@
         group: Javk13 
         mode: '0755'#
 
-    - name: 'Generación de certificado autofirmado OpenSSL'
-      community.crypto.x509_certificate: #Compatible con 2.9
-      #openssl_certificate: # para ansible 2.9
+    - name: 'Generando certificado autofirmado OpenSSL'
+      community.crypto.x509_certificate:
         path: /home/Javk13/servidorweb/localhost.crt
         privatekey_path: /home/Javk13/servidorweb/localhost.key
         csr_path: /home/Javk13/servidorweb/localhost.csr
         provider: selfsigned
         owner: Javk13 
         group: Javk13 
-        mode: '0755' #
+        mode: '0755'
         
-    - name: 'Descarga de configuración del servidor desde repo Github'
+    - name: 'Descargando configuración de imagen Apache desde Github'
       ansible.builtin.git:
-      #git:
         repo: https://github.com/javk13/ServidorWeb.git
         dest: /home/Javk13/repoWeb
                        
-    - name: 'Copia de archivos configuración web'
+    - name: 'Copiando archivos imagen Apache a carpeta con certificado x509'
       ansible.builtin.copy:
-      #copy:
-        #src: /home/Javk13/repoWeb/.htaccess
         src: /home/Javk13/repoWeb/
-        #src: "{{configuracion}}"
         dest: /home/Javk13/servidorweb
-        #owner: root
-        #group: root
         owner: Javk13 
         group: Javk13 
         remote_src: yes
         mode: '0755'
-        #mode: '0644'
-        #validate: /usr/sbin/visudo -csf %s
 
-    #- name: Execute the command in remote shell; stdout goes to the specified file on the remote
-      #ansible.builtin.shell:
-        #chdir: /home/Javk13/servidorweb/
-        #cmd: sudo podman build -t webserver . 
-
-    - name: 'Autentificación en registry y copia credenciales en .json'
+    - name: 'Autentificandose en Acr y copiando credenciales en .json'
       containers.podman.podman_login:
         username: javk13
         password: 'qRgAk8O0N5vAQRALJnh8VnQ8KvctotPMJ5MGsrDX5d+ACRAfClxi'
         registry: javk13.azurecr.io
-        authfile: etc/containers/auth.json #
+        authfile: etc/containers/auth.json 
 
-    - name: 'Creación de imagen y envio a registry'
+    - name: 'Creando imagen y enviando al Acr'
       containers.podman.podman_image:
-      #podman_image:
         build:
           cache: false
           file: /home/Javk13/servidorweb/Containerfile
         name: javk13.azurecr.io/servidorweb
-        #auth_file: /home/Javk13/servidorweb/Containerfile
-        #push_args:
-          #dest: /home/Javk13/servidorweb
         path: /home/Javk13/servidorweb
-        #build:
-          #file: /home/Javk13/servidorweb/Containerfile  
-          #rm: yes
         tag: casopractico2
         push: true
         push_args:
-          dest: javk13.azurecr.io #
-        auth_file: etc/containers/auth.json #
-        ##username: javk13
-        ##password: 0NF7buDhlFsuDGXyEZ6FIQQIYpvHyzhOXlfo6+cbiZ+ACRCpndym
-        #password: "{{ vault_registry_password }}"
+          dest: javk13.azurecr.io 
+        auth_file: etc/containers/auth.json 
 
-    - name: 'Creación contenedor,conf. puertos y copia a systemd'
+    - name: 'Creando contenedor y conectando con systemd'
       containers.podman.podman_container:
         name: web
         image: javk13.azurecr.io/servidorweb:casopractico2
         authfile: 'etc/containers/auth.json'
-          #username: javk13
-          #password: 0NF7buDhlFsuDGXyEZ6FIQQIYpvHyzhOXlfo6+cbiZ+ACRCpndym
         state: present
         ports:
           - "8080:443"
@@ -145,15 +109,15 @@
           restart_policy: always
           names: true
 
-    - name: 'Reinicio del demonio systemd'
+    - name: 'Reiniciando demonio del systemd'
       ansible.builtin.systemd:
         daemon_reload: true
 
-    - name: Just force systemd to re-execute itself (2.8 and above)
+    - name: 'Forzando re-ejecución de systemd'
       ansible.builtin.systemd:
         daemon_reexec: true
 
-    - name: 'Levantar contenedor desde systemd'
+    - name: 'Levantando contenedor desde systemd'
       ansible.builtin.systemd:
         state: started
         name: container-web.service

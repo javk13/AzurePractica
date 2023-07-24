@@ -1,13 +1,6 @@
 paquetes:
 - python3-kubernetes
 
-
 directorios:
 - /home/Javk13/webAKS
 
-
-imagenes:
-#- javk13.azurecr.io/servidorweb:casopractico2
-- docker.io/library/nginx:latest
-#- javk13.azurecr.io/web_aks:casopractico2
-- docker.io/library/httpd:latest

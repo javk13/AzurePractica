@@ -4,51 +4,39 @@
   remote_user: Javk13
   become: true
   vars_files:
-    #- vars/00_vars.yaml
     - vars/01_vars.yaml
-    #- vars/02_vars.yaml
   tasks:
   
-    - name: 'Creación de directorio de 01_vars.yaml'
+    - name: 'Creando directorios indicados en 01_vars.yaml'
       ansible.builtin.file:
-      #file: # para ansible 2.9
-        path: "{{directorios}}"
-        #path: /home/Javk13/servidorweb
+        path: "{{ directorios }}"
         state: directory
         mode: '0755'
 
-    - name: 'Descarga de .yaml desde repo Github'
+    - name: 'Descargando yaml con objetos del cluster desde Github'
       ansible.builtin.git:
-      #git:
         repo: https://github.com/javk13/WebAks.git
         dest: /home/Javk13/webAKS
-        #mode: '0755' (No soporta mode)
 
-    - name: 'descarga de imagen'
+    - name: 'Descargando imagen desde Docker Hub'
       containers.podman.podman_image:
         name: docker.io/library/nginx 
 
-    - name: 'Cambio de nombre imagen'
+    - name: 'Cambiando y etiquetando imagen para acr'
       containers.podman.podman_tag:
         image: nginx
         target_names:
           - javk13.azurecr.io/web_aks:casopractico2
 
-    - name: 'Etiquetado y envío a registry'
+    - name: 'Enviando imagen al Acr'
       containers.podman.podman_image:
         name: javk13.azurecr.io/web_aks
         tag: casopractico2
         push: true
         push_args:
-          dest: javk13.azurecr.io #
+          dest: javk13.azurecr.io 
         auth_file: etc/containers/auth.json
         pull: false
-
-    #- name: Remove an image
-      #containers.podman.podman_image:
-        #name: "{{ imagenes }}" (no funciona)
-        #name: javk13.azurecr.io/web_aks (funciona)
-        #state: absent
 
     
           
